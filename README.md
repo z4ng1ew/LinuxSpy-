@@ -762,7 +762,7 @@ If you find LinuxSpy useful, please consider giving it a ⭐️ on GitHub!
 
 <div align="center">
 
-**Made with ❤️ for the Linux community**
+**Made for the Linux community**
 
 [Documentation](https://github.com/yourusername/LinuxSpy/wiki) • 
 [Examples](./examples) • 

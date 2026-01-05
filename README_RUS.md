@@ -1,14 +1,3 @@
-### 1. Описание репозитория (Description)
-
-Это текст для заголовка репозитория на GitHub/GitLab (до 280 символов):
-
-> Мощный набор Bash-скриптов для системного мониторинга и анализа Linux. Включает инструменты для валидации входных данных, аудита ресурсов (RAM, CPU, HDD), цветовой визуализации отчетов, работы с конфигурационными файлами и глубокого анализа файловой системы с хешированием.
-
----
-
-### 2. Файл README.md
-
-
 ![Bash](https://img.shields.io/badge/Language-Bash-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
 ![Linux](https://img.shields.io/badge/OS-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
