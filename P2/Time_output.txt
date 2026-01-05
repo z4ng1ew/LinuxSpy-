@@ -1,0 +1,40 @@
+
+
+
+
+s@Vivo:~$ ip route get 8.8.8.8
+8.8.8.8 via 192.168.1.1 dev wlp1s0 src 192.168.1.102 uid 1000 
+    cache 
+
+
+s@Vivo:~$ ip route get 8.8.8.8 2>/dev/null | awk '{print $5; exit}' 
+wlp1s0
+
+
+s@Vivo:~$ ip route get 8.8.8.8 2>/dev/null | awk '{print $5; exit}' || echo "eth0"
+wlp1s0
+
+
+
+
+
+
+
+s@Vivo:~$ ip -4 addr show dev wlp1s0
+2: wlp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    inet 192.168.1.102/24 brd 192.168.1.255 scope global dynamic noprefixroute wlp1s0
+       valid_lft 60577sec preferred_lft 60577sec
+
+
+s@Vivo:~$ ip -4 addr show dev wlp1s0 | awk '/inet/ {print $2; exit}' 
+192.168.1.102/24
+
+
+s@Vivo:~$ ip -4 addr show dev wlp1s0 | awk '/inet/ {print $2; exit}' | cut -d'/' -f1
+192.168.1.102
+ 
+
+ s@Vivo:~$ ip -4 addr show dev wlp1s0 2>/dev/null | awk '/inet/ {print $2; exit}' | cut -d'/' -f2
+24
+
+

@@ -1,0 +1,6 @@
+# Сделать скрипт исполняемым
+chmod +x system_audit.sh 
+
+# Запустить анализ
+./system_audit.sh /var/log/
+./system_audit.sh ./test_directory/

@@ -1,0 +1,2 @@
+Выдайте права на выполнение: chmod +x system_audit.sh
+Запустите: ./system_audit.sh
