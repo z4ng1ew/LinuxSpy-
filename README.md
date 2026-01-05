@@ -742,18 +742,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 👥 Authors & Acknowledgments
-
-**Created by:**
-- **John** - *Lead Developer* - Core architecture and implementation
-- **Sebastian** - *Project Initiator* - Requirements and testing
-
-**Special Thanks:**
-- Mike - For advocating Linux adoption
-- The open-source community
-
----
-
 ## 🌟 Star History
 
 If you find LinuxSpy useful, please consider giving it a ⭐️ on GitHub!
@@ -766,12 +754,9 @@ If you find LinuxSpy useful, please consider giving it a ⭐️ on GitHub!
 
 ---
 
-## 📞 Support & Contact
+## 📞 Contact
+- 📧 **Email**: z4ng1ew@gmail.com
 
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/yourusername/LinuxSpy/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/LinuxSpy/discussions)
-- 📧 **Email**: your.email@example.com
-- 🌐 **Website**: https://linuxspy.dev
 
 ---
 
