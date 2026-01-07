@@ -1,49 +1,6 @@
 #!/usr/bin/env bash
 
-
-
-
-
-
-
-
-
-
-set -euo pipefail
-
-trap 'echo -e "\n\nПрервано пользователем."; exit 130' INT TERM
-
-check_dependencies() {
-    local missing=()
-    for cmd in ip awk free df date hostname; do
-        command -v "$cmd" &>/dev/null || missing+=("$cmd")
-    done
-    
-    if [[ ${#missing[@]} -gt 0 ]]; then
-        echo "Ошибка: отсутствуют команды: ${missing[*]}" >&2
-        exit 1
-    fi
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 gather_system_facts() {
-
-
-
     local node_name
     node_name=$(hostname -s 2>/dev/null || hostname)
 
@@ -57,13 +14,6 @@ gather_system_facts() {
         tz_offset="0"
     fi
 
-
-
-
-
-
-
-
     local active_user
     active_user=$(whoami)
 
@@ -76,15 +26,8 @@ gather_system_facts() {
         os_release=$(uname -s 2>/dev/null || echo "Unknown")
     fi
 
-
     local current_moment
     current_moment=$(LC_TIME=C date +"%d %b %Y %H:%M:%S" | sed 's/^0//')
-
-
-
-
-
-
 
     local uptime_human uptime_seconds
     if [[ -f /proc/uptime ]]; then
@@ -108,27 +51,6 @@ gather_system_facts() {
         uptime_human="N/A"
     fi
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     local main_iface
     main_iface=$(ip route get 8.8.8.8 2>/dev/null | awk '{print $5; exit}' || echo "eth0")
 
@@ -145,23 +67,10 @@ gather_system_facts() {
                 print "N/A";
                 exit;
             }
-            
-            # Расчёт маски через битовые операции
             mask = 0;
-            for (i = 0; i < prefix; i++) {
-                mask = mask * 2 + 1;
-            }
-            for (i = prefix; i < 32; i++) {
-                mask = mask * 2;
-            }
-            
-            # Извлечение октетов
-            octet1 = int(mask / 16777216) % 256;
-            octet2 = int(mask / 65536) % 256;
-            octet3 = int(mask / 256) % 256;
-            octet4 = mask % 256;
-            
-            printf "%d.%d.%d.%d", octet1, octet2, octet3, octet4;
+            for (i = 0; i < prefix; i++) mask = mask * 2 + 1;
+            for (i = prefix; i < 32; i++) mask = mask * 2;
+            printf "%d.%d.%d.%d", int(mask/16777216)%256, int(mask/65536)%256, int(mask/256)%256, mask%256;
         }')
     else
         subnet_mask="N/A"
@@ -170,79 +79,27 @@ gather_system_facts() {
     default_gateway=$(ip route 2>/dev/null | awk '/default/ {print $3; exit}')
     [[ -z "$default_gateway" ]] && default_gateway="N/A"
 
-
-
-
-
-
-
-
-
-
     local ram_total_gb ram_used_gb ram_free_gb
     if command -v free &>/dev/null; then
         read -r ram_total_gb ram_used_gb ram_free_gb < <(
             LC_ALL=C free -b | awk '/Mem:/ {
-                total = $2 / 1024 / 1024 / 1024;
-                used  = $3 / 1024 / 1024 / 1024;
-                free_m = $4 / 1024 / 1024 / 1024;
-                printf "%.3f %.3f %.3f", total, used, free_m
+                printf "%.3f %.3f %.3f", $2/1073741824, $3/1073741824, $4/1073741824
             }'
         )
     else
-        ram_total_gb="N/A"
-        ram_used_gb="N/A"
-        ram_free_gb="N/A"
+        ram_total_gb="N/A" ram_used_gb="N/A" ram_free_gb="N/A"
     fi
-
-
-
-
-
-
-
-
-
-
-
 
     local root_total_mb root_used_mb root_free_mb
     if command -v df &>/dev/null; then
         read -r root_total_mb root_used_mb root_free_mb < <(
             df -B1 / 2>/dev/null | awk 'NR==2 {
-                total = $2/1024/1024;
-                used = $3/1024/1024;
-                free = $4/1024/1024;
-                printf "%.2f %.2f %.2f", total, used, free
+                printf "%.2f %.2f %.2f", $2/1048576, $3/1048576, $4/1048576
             }'
         )
     else
-        root_total_mb="N/A"
-        root_used_mb="N/A"
-        root_free_mb="N/A"
+        root_total_mb="N/A" root_used_mb="N/A" root_free_mb="N/A"
     fi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     cat <<EOF
 HOSTNAME = $node_name
@@ -263,88 +120,3 @@ SPACE_ROOT_USED = ${root_used_mb} MB
 SPACE_ROOT_FREE = ${root_free_mb} MB
 EOF
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-prompt_persistence() {
-    local facts_snapshot="$1"
-    
-    while true; do
-        read -rp "Сохранить результат в файл? (Y/N): " user_choice
-        
-        user_choice=$(echo "$user_choice" | tr '[:upper:]' '[:lower:]')
-        
-        case "$user_choice" in
-            y|yes)
-                local timestamp report_name
-                timestamp=$(date +"%d_%m_%y_%H_%M_%S")
-                report_name="${timestamp}.status"
-                
-                if echo "$facts_snapshot" > "$report_name" 2>/dev/null; then
-                    echo -e "\nОтчёт сохранён: $report_name"
-                    return 0
-                else
-                    echo -e "\nОшибка: не удалось сохранить файл в текущей директории" >&2
-                    return 1
-                fi
-                ;;
-            n|no)
-                echo -e "\nДанные не будут сохранены."
-                return 0
-                ;;
-            *)
-                echo "Некорректный ввод. Используйте Y или N."
-                ;;
-        esac
-    done
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-main() {
-    check_dependencies
-    
-    local system_report
-    system_report=$(gather_system_facts)
-    
-    echo -e "\n=== СИСТЕМНАЯ СВОДКА ==="
-    echo "$system_report"
-    echo "======================="
-    
-    prompt_persistence "$system_report"
-}
-
-main "$@"
