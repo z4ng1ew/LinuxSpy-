@@ -321,9 +321,9 @@ main() {
     
     read -r col1_bg col1_fg col2_bg col2_fg col1_bg_is_default col1_fg_is_default col2_bg_is_default col2_fg_is_default < <(load_config)
     
-    echo -e "\n=== СИСТЕМНАЯ СВОДКА ==="
+
     gather_system_facts "$col1_bg" "$col1_fg" "$col2_bg" "$col2_fg"
-    echo "======================="
+
     
     echo ""
     print_color_scheme "$col1_bg" "$col1_fg" "$col2_bg" "$col2_fg" "$col1_bg_is_default" "$col1_fg_is_default" "$col2_bg_is_default" "$col2_fg_is_default"

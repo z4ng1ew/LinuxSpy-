@@ -1,1 +1,5 @@
-bash -x 
+bash -x  ./main.sh 1 6 3 6
+
+chmod +x *.sh
+
+./main.sh 1 6 3 6
