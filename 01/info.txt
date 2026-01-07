@@ -1,22 +1,22 @@
-chmod +x whisper_validator.sh echo_spell.sh
+chmod +x main.sh
 
 
 # Успешный случай
-./echo_spell.sh Привет
+./main.sh Привет
 # → Привет
 
 # Пустой аргумент
-./echo_spell.sh ""
+./main.sh ""
 # → error: заклинание не может быть пустым.
 
 # Число
-./echo_spell.sh 42
+./main.sh 42
 # → error: заклинание не должно быть числом.
 
 # Нет аргумента
-./echo_spell.sh
+./main.sh
 # → error: требуется ровно одно заклинание.
 
 # Два аргумента
-./echo_spell.sh раз два
+./main.sh раз два
 # → error: требуется ровно одно заклинание.
